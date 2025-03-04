@@ -1,0 +1,33 @@
+===============================================================================
+
+ActiveAdminDynamicForms has been successfully installed!
+
+Here's what was done:
+
+1. Created database migrations for dynamic forms
+2. Added an initializer at config/initializers/active_admin_dynamic_forms.rb
+3. Added an Active Admin resource at app/admin/dynamic_form.rb
+4. Mounted the engine at /active_admin_dynamic_forms
+5. Added asset links to app/assets/config/manifest.js
+
+Next steps:
+
+1. Run the migrations:
+   $ rails db:migrate
+
+2. Restart your server:
+   $ rails server
+
+3. Visit your Active Admin dashboard and look for the "Dynamic Forms" menu item
+
+4. To associate a model with dynamic forms, add this to your model:
+   
+   class YourModel < ApplicationRecord
+     has_dynamic_form
+   end
+
+5. To display a dynamic form in your views:
+   
+   <%= dynamic_form_for(@your_model) %>
+
+=============================================================================== 

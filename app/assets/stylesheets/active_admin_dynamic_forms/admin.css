@@ -1,0 +1,82 @@
+/* ActiveAdminDynamicForms CSS */
+
+.dynamic-form-field {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+.dynamic-form-field .field_type select {
+  width: 100%;
+}
+
+.dynamic-form-field .has_many_container {
+  margin-top: 15px;
+}
+
+.dynamic-form-field .has_many_container h3 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.dynamic-form-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dynamic-form-option .label,
+.dynamic-form-option .value {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.dynamic-form-option .position {
+  width: 50px;
+}
+
+/* Styles for the dynamic form in the frontend */
+.dynamic-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.dynamic-form .input {
+  margin-bottom: 20px;
+}
+
+.dynamic-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.dynamic-form input[type="text"],
+.dynamic-form input[type="email"],
+.dynamic-form input[type="number"],
+.dynamic-form textarea,
+.dynamic-form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.dynamic-form .radio,
+.dynamic-form .checkbox {
+  margin-bottom: 5px;
+}
+
+.dynamic-form .hint {
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.dynamic-form .error {
+  color: #c00;
+  font-size: 0.9em;
+  margin-top: 5px;
+} 

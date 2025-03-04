@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveAdminDynamicForms Database Schema",
+  "description": "Database schema for the ActiveAdminDynamicForms gem",
+  "type": "object",
+  "properties": {
+    "dynamic_forms": {
+      "type": "object",
+      "description": "Stores form definitions",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "created_at", "updated_at"]
+    },
+    "dynamic_form_fields": {
+      "type": "object",
+      "description": "Stores field definitions for each form",
+      "properties": {
+        "id": { "type": "integer" },
+        "dynamic_form_id": { "type": "integer" },
+        "label": { "type": "string" },
+        "field_type": { 
+          "type": "string",
+          "enum": ["text", "textarea", "number", "email", "date", "select", "radio", "checkbox"]
+        },
+        "placeholder": { "type": "string" },
+        "required": { "type": "boolean" },
+        "position": { "type": "integer" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "dynamic_form_id", "label", "field_type", "position", "created_at", "updated_at"]
+    },
+    "dynamic_form_options": {
+      "type": "object",
+      "description": "Stores options for select, radio, and checkbox fields",
+      "properties": {
+        "id": { "type": "integer" },
+        "dynamic_form_field_id": { "type": "integer" },
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "position": { "type": "integer" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "dynamic_form_field_id", "label", "value", "position", "created_at", "updated_at"]
+    },
+    "dynamic_form_responses": {
+      "type": "object",
+      "description": "Stores form responses",
+      "properties": {
+        "id": { "type": "integer" },
+        "dynamic_form_id": { "type": "integer" },
+        "record_type": { "type": "string" },
+        "record_id": { "type": "integer" },
+        "data": { "type": "object" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "dynamic_form_id", "record_type", "record_id", "data", "created_at", "updated_at"]
+    }
+  }
+} 
