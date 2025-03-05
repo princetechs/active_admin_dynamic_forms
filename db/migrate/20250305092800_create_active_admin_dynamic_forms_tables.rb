@@ -23,7 +23,6 @@ class CreateActiveAdminDynamicFormsTables < ActiveRecord::Migration[7.0]
         t.string :field_type, null: false
         t.integer :position, null: false
         t.boolean :required, default: false
-        t.string :placeholder
         t.timestamps
       end
     end

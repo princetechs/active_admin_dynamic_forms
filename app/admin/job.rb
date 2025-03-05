@@ -3,7 +3,7 @@ ActiveAdmin.register Job do
   permit_params :user_id, :title, :job_description, :location, :company_info,
                 :employment_type, :experience_level, :salary_range, :required_skills,
                 :screening_questions, :status, :application_deadline,
-                dynamic_form_responses_attributes: [:id, :dynamic_form_id, :_destroy, data: {}]
+                dynamic_form_responses_attributes: [:id, :dynamic_form_id, :_destroy, {data: {}}]
 
   # Index page customization
   index do
@@ -46,12 +46,15 @@ ActiveAdmin.register Job do
     end
     
     f.inputs "Dynamic Form" do
-      f.has_many :dynamic_form_responses, new_record: 'Add Dynamic Form', allow_destroy: true do |df|
-        df.input :dynamic_form_id, as: :select, collection: ActiveAdminDynamicForms::Models::DynamicForm.all.map { |form| [form.name, form.id] }
+      f.has_many :dynamic_form_responses, new_record: 'Link Form', allow_destroy: true do |df|
+        df.input :dynamic_form_id, as: :select, 
+          collection: ActiveAdminDynamicForms::Models::DynamicForm.available_for_association(Job),
+          hint: 'Select form specific to Job model'
         
         if df.object.persisted? && df.object.form.present?
           df.object.form.fields.order(:position).each do |field|
-            field_name = "dynamic_form_responses_attributes[#{df.index}][data][#{field.label}]"
+            field_name = "dynamic_form_responses_attributes[#{df.index}][data][#{field.field_key}]"
+            field_value = df.object.data[field.field_key] if df.object.data.present?
             field_value = df.object.data[field.label] if df.object.data.present?
             
             case field.field_type
@@ -118,7 +121,7 @@ ActiveAdmin.register Job do
       panel "Dynamic Form Response: #{resource.dynamic_form.name}" do
         attributes_table_for resource.dynamic_form_response do
           resource.form_data.each do |key, value|
-            row key do
+            row field.label do
               if value.is_a?(Array)
                 ul do
                   value.each do |v|
@@ -142,7 +145,20 @@ ActiveAdmin.register Job do
         end
       end
     end
+
+    # Show dynamic form responses if present
+    if resource.form.present?
+      panel "Dynamic Form Responses" do
+        attributes_table_for resource.form do
+          resource.dynamic_form.fields.order(:position).each do |field|
+            row field.label do
+              resource.form.send(field.field_key)
+            end
+          end
+        end
+      end
+    end
     
     active_admin_comments
   end
-end # rubocop:disable Lint/SyntaxError
+end

@@ -45,6 +45,30 @@ This will:
 2. Add Active Admin configurations
 3. Set up required models
 
+#### Alternative Installation Methods
+
+If you encounter issues with the Rails generator, you can use one of these alternative methods:
+
+1. Using the Rake task:
+
+```bash
+$ rake active_admin_dynamic_forms:install
+```
+
+2. Using the standalone script:
+
+```bash
+$ ruby /path/to/active_admin_dynamic_forms/install.rb
+```
+
+3. Using the bin script:
+
+```bash
+$ /path/to/active_admin_dynamic_forms/bin/active_admin_dynamic_forms_install
+```
+
+For detailed installation instructions and troubleshooting, see the [INSTALL.md](INSTALL.md) file.
+
 ### Creating Forms
 
 Navigate to the Forms section in your Active Admin dashboard to create and manage forms.

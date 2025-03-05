@@ -26,6 +26,9 @@ module ActiveAdminDynamicForms
         def self.ransackable_associations(auth_object = nil)
           ["dynamic_form_responses", "dynamic_form_response", "dynamic_form"] + (super rescue [])
         end
+        
+        # Register this model with the HasDynamicFormMethod module
+        ActiveAdminDynamicForms::HasDynamicFormMethod.register_model(self)
       end
       
       def create_or_update_form_response
@@ -59,11 +62,30 @@ module ActiveAdminDynamicForms
         build_dynamic_form_response unless dynamic_form_response
         dynamic_form_response.data = data
       end
+      
+      # Get available forms for this model
+      def available_forms
+        ActiveAdminDynamicForms::Models::DynamicForm.available_for_association(self.class)
+      end
     end
   end
   
   # Define the module before using it
   module HasDynamicFormMethod
+    @registered_models = []
+    
+    class << self
+      attr_reader :registered_models
+      
+      def register_model(model_class)
+        @registered_models << model_class.name unless @registered_models.include?(model_class.name)
+      end
+      
+      def model_names
+        @registered_models
+      end
+    end
+
     def has_dynamic_form
       include ActiveAdminDynamicForms::Concerns::HasDynamicForm
     end

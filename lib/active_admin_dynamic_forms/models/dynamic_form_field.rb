@@ -47,4 +47,4 @@ module ActiveAdminDynamicForms
       end
     end
   end
-end 
+end

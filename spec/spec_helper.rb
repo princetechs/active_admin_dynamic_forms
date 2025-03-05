@@ -6,16 +6,24 @@ require 'formtastic'
 require 'active_admin'
 require 'rspec/rails'
 require 'active_support/core_ext'
-require 'active_admin_dynamic_forms'
+# Establish test database connection
+require 'active_record'
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 ENV['RAILS_ENV'] = 'test'
 
-# Initialize Rails application
+# Initialize test application first
 module TestApp
   class Application < Rails::Application
     config.eager_load = false
     config.active_support.deprecation = :log
     config.secret_key_base = 'test_key_base'
+    
+    # Configure test database
+    ActiveRecord::Base.establish_connection(
+      adapter: 'sqlite3',
+      database: ':memory:'
+    )
     
     # Initialize ActionView
     config.action_view = ActiveSupport::OrderedOptions.new
@@ -23,7 +31,12 @@ module TestApp
   end
 end
 
+# Require gem first to register engine initializers
+require 'active_admin_dynamic_forms'
+
+# Now initialize the Rails application
 TestApp::Application.initialize!
+
 
 # Initialize Formtastic
 module Formtastic

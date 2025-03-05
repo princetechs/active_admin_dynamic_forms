@@ -52,7 +52,7 @@ RSpec.describe ActiveAdminDynamicForms::Concerns::HasDynamicForm do
     end
   end
 
-  let(:dynamic_form) { ActiveAdminDynamicForms::Models::DynamicForm.create!(name: "Test Form #{rand(1000)}", description: 'Test Description') }
+  let(:dynamic_form) { ActiveAdminDynamicForms::Models::DynamicForm.create!(name: "Test Form #{rand(1000)}", description: 'Test Description', model_class: 'TestModel') }
   let(:test_instance) { test_class.create! }
 
   describe '#form' do

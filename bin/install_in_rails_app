@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+# This script is used to install the gem in a Rails application
+# It creates a symlink to the generator files in the Rails application
+
+require 'fileutils'
+
+# Get the Rails application directory
+puts "Enter the path to your Rails application directory:"
+rails_app_dir = gets.chomp
+
+# Check if the directory exists
+unless File.directory?(rails_app_dir)
+  puts "❌ The directory #{rails_app_dir} does not exist."
+  exit 1
+end
+
+# Create the generators directory in the Rails application
+generators_dir = File.join(rails_app_dir, 'lib/generators')
+FileUtils.mkdir_p(generators_dir)
+
+# Create a symlink to the generator files
+source = File.expand_path('../../lib/generators/active_admin_dynamic_forms', __FILE__)
+target = File.join(generators_dir, 'active_admin_dynamic_forms')
+
+# Remove the symlink if it already exists
+FileUtils.rm_f(target) if File.exist?(target)
+
+# Create the symlink
+FileUtils.ln_sf(source, target)
+
+puts "✅ Symlink created successfully."
+puts "You can now run the generator with: rails generate active_admin_dynamic_forms:install" 
