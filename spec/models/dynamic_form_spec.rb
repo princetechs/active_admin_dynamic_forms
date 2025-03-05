@@ -5,6 +5,7 @@ RSpec.describe ActiveAdminDynamicForms::Models::DynamicForm do
     # This test will be implemented when we have a factory
     # expect(build(:dynamic_form)).to be_valid
     pending 'Factory implementation'
+    raise "This test should not run yet"
   end
 
   describe 'validations' do
@@ -23,6 +24,7 @@ RSpec.describe ActiveAdminDynamicForms::Models::DynamicForm do
     it 'requires a unique name' do
       # This test will be implemented when we have a proper test environment
       pending 'Database setup for testing'
+      raise "This test should not run yet"
     end
   end
 
@@ -42,6 +44,7 @@ RSpec.describe ActiveAdminDynamicForms::Models::DynamicForm do
     it 'returns an array of name-id pairs' do
       # This test will be implemented when we have a proper test environment
       pending 'Database setup for testing'
+      raise "This test should not run yet"
     end
   end
 
@@ -49,6 +52,7 @@ RSpec.describe ActiveAdminDynamicForms::Models::DynamicForm do
     it 'finds the response for a given record' do
       # This test will be implemented when we have a proper test environment
       pending 'Database setup for testing'
+      raise "This test should not run yet"
     end
   end
-end 
+end

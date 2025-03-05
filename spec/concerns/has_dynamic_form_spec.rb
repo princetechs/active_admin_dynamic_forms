@@ -1,11 +1,26 @@
 require 'spec_helper'
 
 RSpec.describe ActiveAdminDynamicForms::Concerns::HasDynamicForm do
-  let(:test_class) do
-    Class.new(ActiveRecord::Base) do
+  # Define the test class once before all tests
+  before(:all) do
+    # Remove the constant if it already exists to avoid warnings
+    Object.send(:remove_const, :TestModel) if Object.const_defined?(:TestModel)
+    
+    # Define a named class for testing
+    Object.const_set('TestModel', Class.new(ActiveRecord::Base) do
       self.table_name = 'test_models'
       has_dynamic_form
-    end
+    end)
+  end
+
+  # Clean up after all tests
+  after(:all) do
+    Object.send(:remove_const, :TestModel) if Object.const_defined?(:TestModel)
+  end
+
+  # Use a method to access the test class instead of a let block
+  def test_class
+    TestModel
   end
 
   describe 'when included in a class' do
@@ -42,12 +57,12 @@ RSpec.describe ActiveAdminDynamicForms::Concerns::HasDynamicForm do
 
   describe '#form' do
     it 'returns the dynamic_form_response' do
-      response = ActiveAdminDynamicForms::Models::DynamicFormResponse.create!(
+      response = ActiveAdminDynamicForms::Models::DynamicFormResponse.new(
         dynamic_form_id: dynamic_form.id,
-        record_id: test_instance.id,
-        record_type: test_instance.class.name,
         data: { 'test_field' => 'test_value' }
       )
+      response.record = test_instance
+      response.save!
       expect(test_instance.form).to eq(response)
     end
   end
@@ -78,6 +93,13 @@ RSpec.describe ActiveAdminDynamicForms::Concerns::HasDynamicForm do
 
       context 'when dynamic_form_response does not exist' do
         it 'creates a new response' do
+          # Make sure there are no existing responses
+          ActiveAdminDynamicForms::Models::DynamicFormResponse.where(
+            record_type: test_instance.class.name,
+            record_id: test_instance.id
+          ).destroy_all
+          
+          # Now save should create a new response
           expect { test_instance.save! }.to change {
             ActiveAdminDynamicForms::Models::DynamicFormResponse.count
           }.by(1)

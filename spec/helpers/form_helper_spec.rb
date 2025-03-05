@@ -21,6 +21,7 @@ RSpec.describe ActiveAdminDynamicForms::Helpers::FormHelper do
       it 'renders a form with fields' do
         # This test will be implemented when we have a proper test environment
         pending 'View testing setup'
+        raise "This test should not run yet"
       end
     end
   end
@@ -30,6 +31,7 @@ RSpec.describe ActiveAdminDynamicForms::Helpers::FormHelper do
       it 'renders a text input' do
         # This test will be implemented when we have a proper test environment
         pending 'View testing setup'
+        raise "This test should not run yet"
       end
     end
 
@@ -37,6 +39,7 @@ RSpec.describe ActiveAdminDynamicForms::Helpers::FormHelper do
       it 'renders a textarea' do
         # This test will be implemented when we have a proper test environment
         pending 'View testing setup'
+        raise "This test should not run yet"
       end
     end
 
@@ -44,6 +47,7 @@ RSpec.describe ActiveAdminDynamicForms::Helpers::FormHelper do
       it 'renders a select with options' do
         # This test will be implemented when we have a proper test environment
         pending 'View testing setup'
+        raise "This test should not run yet"
       end
     end
 
@@ -51,6 +55,7 @@ RSpec.describe ActiveAdminDynamicForms::Helpers::FormHelper do
       it 'renders radio buttons' do
         # This test will be implemented when we have a proper test environment
         pending 'View testing setup'
+        raise "This test should not run yet"
       end
     end
 
@@ -58,7 +63,8 @@ RSpec.describe ActiveAdminDynamicForms::Helpers::FormHelper do
       it 'renders checkboxes' do
         # This test will be implemented when we have a proper test environment
         pending 'View testing setup'
+        raise "This test should not run yet"
       end
     end
   end
-end 
+end

@@ -32,17 +32,18 @@ module ActiveAdminDynamicForms
         # Simply return if no dynamic form is associated
         return if dynamic_form_id.nil?
         
-        # Skip if no changes to dynamic_form_id and response already exists
-        return if !saved_changes[:dynamic_form_id] && dynamic_form_responses.exists?
-        
         # Find existing response or build a new one
-        response = dynamic_form_responses.first_or_initialize(
-          dynamic_form_id: dynamic_form_id,
-          data: {}
+        response = dynamic_form_responses.find_or_initialize_by(
+          dynamic_form_id: dynamic_form_id
         )
         
-        # Ensure dynamic_form_id is set correctly
-        response.dynamic_form_id = dynamic_form_id
+        # Set the record association properly
+        response.record = self
+        
+        # Preserve existing data if present
+        response.data ||= {}
+        
+        # Save the response
         response.save!
       end
       
