@@ -91,6 +91,50 @@ job.form.field_name # Access a specific field
 job.form.fields # Access all fields
 ```
 
+### Using the Polymorphic Association Structure
+
+The gem now supports a flexible polymorphic association structure that allows you to:
+
+1. Associate any model with multiple forms without requiring a `dynamic_form_id` column
+2. Manage form associations through a standardized interface
+3. Display forms and responses in a consistent way across different models
+
+#### Adding Dynamic Forms to an ActiveAdmin Resource
+
+To add dynamic form functionality to any ActiveAdmin resource:
+
+```ruby
+ActiveAdmin.register User do
+  has_dynamic_forms
+end
+```
+
+This will:
+- Add a "Dynamic Forms" tab to the resource
+- Display associated forms on the show page
+- Add routes for managing form associations
+- Include form selection in the edit form
+
+#### Manually Managing Form Associations
+
+You can also manually manage form associations in your code:
+
+```ruby
+# Add a form to a record
+user = User.find(1)
+form = ActiveAdminDynamicForms::Models::DynamicForm.find(2)
+user.add_form(form)
+
+# Remove a form from a record
+user.remove_form(form)
+
+# Get all forms associated with a record
+user.specific_forms # Returns array of [name, id] pairs
+
+# Get all available forms for a record
+user.available_forms # Returns array of [name, id] pairs
+```
+
 ## Database Schema
 
 The gem creates the following tables:
@@ -99,6 +143,8 @@ The gem creates the following tables:
 - `dynamic_form_fields`: Stores field definitions for each form
 - `dynamic_form_options`: Stores options for select, radio, and checkbox fields
 - `dynamic_form_responses`: Stores form responses
+- `dynamic_form_model_associations`: Stores associations between forms and model classes
+- `form_record_associations`: Stores polymorphic associations between forms and specific records
 
 ## Development
 
@@ -110,4 +156,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/prince
 
 ## License
 
-The gem is available as open source under the terms of the MIT License. # active_admin_dynamic_forms
+The gem is available as open source under the terms of the MIT License.

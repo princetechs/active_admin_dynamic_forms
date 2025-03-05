@@ -71,7 +71,7 @@ rails generate active_admin_dynamic_forms:install
 If none of the above options work, you can manually install the gem:
 
 1. Create the migrations:
-   - Copy the migration files from `lib/generators/active_admin_dynamic_forms/install/templates/create_active_admin_dynamic_forms_tables.rb` and `lib/generators/active_admin_dynamic_forms/install/templates/add_model_class_to_dynamic_forms.rb` to your `db/migrate` directory.
+   - Copy the migration files from `lib/generators/active_admin_dynamic_forms/install/templates/create_active_admin_dynamic_forms_tables.rb`, `lib/generators/active_admin_dynamic_forms/install/templates/add_model_class_to_dynamic_forms.rb`, `lib/generators/active_admin_dynamic_forms/install/templates/add_placeholder_to_dynamic_form_fields.rb`, `lib/generators/active_admin_dynamic_forms/install/templates/create_dynamic_form_model_associations.rb`, and `lib/generators/active_admin_dynamic_forms/install/templates/create_form_record_associations.rb` to your `db/migrate` directory.
    - Run `rails db:migrate` to create the necessary tables.
 
 2. Create an initializer:
@@ -85,6 +85,57 @@ If none of the above options work, you can manually install the gem:
 
 5. Add the necessary assets to your manifest:
    - Add `//= link active_admin_dynamic_forms/admin.css` and `//= link active_admin_dynamic_forms/admin.js` to your `app/assets/config/manifest.js` file.
+
+## Using the Polymorphic Association Structure
+
+The gem now supports a flexible polymorphic association structure that allows you to associate any model with forms without requiring a `dynamic_form_id` column in each model's table.
+
+### Adding Dynamic Forms to an ActiveAdmin Resource
+
+To add dynamic form functionality to any ActiveAdmin resource:
+
+```ruby
+ActiveAdmin.register User do
+  has_dynamic_forms
+end
+```
+
+This will:
+- Add a "Dynamic Forms" tab to the resource
+- Display associated forms on the show page
+- Add routes for managing form associations
+- Include form selection in the edit form
+
+### Migrating from the Old Structure
+
+If you're upgrading from an older version of the gem that used a `dynamic_form_id` column in each model's table, you can continue to use that approach, or you can migrate to the new polymorphic structure:
+
+1. Run the migration to create the `form_record_associations` table:
+   ```bash
+   rails generate migration CreateFormRecordAssociations
+   ```
+
+2. Copy the migration content from `lib/generators/active_admin_dynamic_forms/install/templates/create_form_record_associations.rb` to your new migration file.
+
+3. Run the migration:
+   ```bash
+   rails db:migrate
+   ```
+
+4. Update your models to use the new polymorphic association structure:
+   ```ruby
+   class User < ApplicationRecord
+     has_dynamic_form
+     # No need to add dynamic_form_id column
+   end
+   ```
+
+5. Update your ActiveAdmin resources to use the new DSL:
+   ```ruby
+   ActiveAdmin.register User do
+     has_dynamic_forms
+   end
+   ```
 
 ## Troubleshooting
 

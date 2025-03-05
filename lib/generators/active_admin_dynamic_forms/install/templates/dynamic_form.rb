@@ -6,14 +6,21 @@ ActiveAdmin.register ActiveAdminDynamicForms::Models::DynamicForm, as: 'Form' do
   
   permit_params :name, :description, :model_class,
                 fields_attributes: [:id, :label, :field_type, :placeholder, :required, :position, :_destroy,
-                                   options_attributes: [:id, :label, :value, :position, :_destroy]]
+                                   options_attributes: [:id, :label, :value, :position, :_destroy]],
+                model_associations_attributes: [:id, :model_class, :associated_record_id, :_destroy]
   
   index do
     selectable_column
     id_column
     column :name
     column :description
-    column :model_class
+    column 'Model Classes' do |form|
+      if form.model_associations.any?
+        form.model_associations.pluck(:model_class).uniq.join(', ')
+      else
+        form.model_class
+      end
+    end
     column :created_at
     column :updated_at
     column 'Fields' do |form|
@@ -27,7 +34,28 @@ ActiveAdmin.register ActiveAdminDynamicForms::Models::DynamicForm, as: 'Form' do
       row :id
       row :name
       row :description
-      row :model_class
+      if resource.model_associations.any?
+        row 'Model Classes' do
+          ul do
+            resource.model_associations.group_by(&:model_class).each do |model_class, associations|
+              li do
+                div b model_class
+                ul do
+                  if associations.any? { |a| a.associated_record_id.present? }
+                    associations.select { |a| a.associated_record_id.present? }.each do |association|
+                      li "Record ID: #{association.associated_record_id}"
+                    end
+                  else
+                    li "All records"
+                  end
+                end
+              end
+            end
+          end
+        end
+      else
+        row :model_class
+      end
       row :created_at
       row :updated_at
     end
@@ -64,11 +92,22 @@ ActiveAdmin.register ActiveAdminDynamicForms::Models::DynamicForm, as: 'Form' do
       # Get all models that have included has_dynamic_form
       available_models = ActiveAdminDynamicForms::HasDynamicFormMethod.model_names
       
-      # Create a select input for model_class
+      # Create a select input for legacy model_class for backward compatibility
       f.input :model_class, as: :select, 
               collection: available_models,
-              include_blank: false,
-              hint: 'Select the model this form will be associated with'
+              include_blank: "Select a primary model (optional if associations defined below)",
+              hint: 'Select the primary model this form will be associated with (for backward compatibility)'
+    end
+    
+    f.inputs 'Model Associations' do
+      f.has_many :model_associations, allow_destroy: true, new_record: 'Add Model Association' do |association|
+        association.input :model_class, as: :select, 
+                         collection: available_models,
+                         include_blank: false,
+                         hint: 'Select the model this form should be associated with'
+        association.input :associated_record_id, 
+                         hint: 'Optional: Specify a record ID to limit this form to a specific record. Leave blank to apply to all records of this model type.'
+      end
     end
     
     f.inputs 'Fields' do

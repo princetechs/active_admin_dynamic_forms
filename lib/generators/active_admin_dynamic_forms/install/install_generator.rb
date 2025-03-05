@@ -18,6 +18,8 @@ module ActiveAdminDynamicForms
         main_migration_exists = migration_exists?('create_active_admin_dynamic_forms_tables')
         model_class_migration_exists = migration_exists?('add_model_class_to_dynamic_forms')
         placeholder_migration_exists = migration_exists?('add_placeholder_to_dynamic_form_fields')
+        model_associations_migration_exists = migration_exists?('create_dynamic_form_model_associations')
+        form_record_associations_migration_exists = migration_exists?('create_form_record_associations')
         
         if main_migration_exists
           say_status :skip, "Main migration already exists", :yellow
@@ -42,6 +44,24 @@ module ActiveAdminDynamicForms
         else
           migration_template 'add_placeholder_to_dynamic_form_fields.rb', 'db/migrate/add_placeholder_to_dynamic_form_fields.rb'
           say_status :create, "Created placeholder migration", :green
+        end
+        
+        # Add a separate migration for creating model associations table
+        # This is needed for supporting multiple model associations
+        if model_associations_migration_exists
+          say_status :skip, "Model associations migration already exists", :yellow
+        else
+          migration_template 'create_dynamic_form_model_associations.rb', 'db/migrate/create_dynamic_form_model_associations.rb'
+          say_status :create, "Created model associations migration", :green
+        end
+        
+        # Add a separate migration for creating form record associations table
+        # This is needed for the new polymorphic association structure
+        if form_record_associations_migration_exists
+          say_status :skip, "Form record associations migration already exists", :yellow
+        else
+          migration_template 'create_form_record_associations.rb', 'db/migrate/create_form_record_associations.rb'
+          say_status :create, "Created form record associations migration", :green
         end
       end
       
