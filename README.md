@@ -82,7 +82,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yourusername/active_admin_dynamic_forms.
+Bug reports and pull requests are welcome on GitHub at https://github.com/princetechs/active_admin_dynamic_forms
 
 ## License
 
